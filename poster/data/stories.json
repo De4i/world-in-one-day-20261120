@@ -1,0 +1,404 @@
+{
+  "briefs": [
+    {
+      "n": 14,
+      "place": "BRAZIL",
+      "source": "Al Jazeera",
+      "text": "Lula meets Raoni; Indigenous land recognised"
+    },
+    {
+      "n": 15,
+      "place": "SEOUL",
+      "source": "SBS",
+      "text": "Bid to impeach Chief Justice Cho Hee-dae"
+    },
+    {
+      "n": 16,
+      "place": "BOUGAINVILLE",
+      "source": "Reuters",
+      "text": "Rio Tinto pledges $370m Panguna fleet"
+    },
+    {
+      "n": 17,
+      "place": "CANBERRA",
+      "source": "Reuters",
+      "text": "CBO: AUKUS subs could shrink US fleet"
+    },
+    {
+      "n": 18,
+      "place": "FLORIDA",
+      "source": "AP",
+      "text": "St. Johns River record 18.3 ft; schools shut"
+    },
+    {
+      "n": 19,
+      "place": "IOWA",
+      "source": "AP",
+      "text": "Army detonates 68 explosive barrels at noon"
+    },
+    {
+      "n": 20,
+      "place": "TONGA",
+      "source": "RNZ",
+      "text": "Emergency declared as El Niño drought bites"
+    },
+    {
+      "n": 21,
+      "place": "WASHINGTON",
+      "source": "Reuters",
+      "text": "Pentagon: war cost vs Iran $48.3bn"
+    },
+    {
+      "n": 22,
+      "place": "LONDON",
+      "source": "BBC",
+      "text": "UK & Norway: £100m+ for 2 Ukrainian vessels"
+    },
+    {
+      "n": 23,
+      "place": "COPENHAGEN",
+      "source": "AFP",
+      "text": "Parliament approves Greenland defence bill"
+    },
+    {
+      "n": 24,
+      "place": "JAKARTA",
+      "source": "Reuters",
+      "text": "Parliament passes asset-forfeiture bill"
+    },
+    {
+      "n": 25,
+      "place": "GLOBAL",
+      "source": "UN News",
+      "text": "UN marks World Children's Day worldwide"
+    },
+    {
+      "n": 26,
+      "place": "CINCINNATI",
+      "source": "AP",
+      "text": "Zoo hippo Fiona dies after swallowing a hat"
+    },
+    {
+      "n": 27,
+      "place": "SENEGAL",
+      "source": "AFP",
+      "text": "Faye enacts supplementary budget by decree"
+    },
+    {
+      "n": 28,
+      "place": "HORMUZ",
+      "source": "UKMTO",
+      "text": "Four vessel attacks in 96 hours - UKMTO"
+    },
+    {
+      "n": 29,
+      "place": "NEW DELHI",
+      "source": "The Hindu",
+      "text": "Pakistan minister to lead SCO delegation"
+    },
+    {
+      "n": 30,
+      "place": "QATAR",
+      "source": "FIFA",
+      "text": "U17 World Cup: Australia stun Argentina 2-0"
+    },
+    {
+      "n": 31,
+      "place": "SOUTH AFRICA",
+      "source": "ICC",
+      "text": "Bavuma record as Harmer spins Proteas win"
+    },
+    {
+      "n": 32,
+      "place": "HONG KONG",
+      "source": "BWF",
+      "text": "Badminton Open semifinals after upset"
+    },
+    {
+      "n": 33,
+      "place": "TAIWAN",
+      "source": "Reuters",
+      "text": "Short-sell curbs start; Russian bombers tracked"
+    },
+    {
+      "n": 34,
+      "place": "TURIN",
+      "source": "ATP",
+      "text": "Alcaraz & Medvedev close ATP Finals groups"
+    },
+    {
+      "n": 35,
+      "place": "LOS ANGELES",
+      "source": "BBC",
+      "text": "Thomas Markle ruled fit to stand trial"
+    },
+    {
+      "n": 36,
+      "place": "WELLINGTON",
+      "source": "ICC",
+      "text": "Nicholls hits 175* in 216-run stand"
+    },
+    {
+      "n": 37,
+      "place": "NORTH KOREA",
+      "source": "Yonhap",
+      "text": "Missile launched toward Sea of Japan"
+    },
+    {
+      "n": 38,
+      "place": "POLAND",
+      "source": "RCB",
+      "text": "Unknown objects probed near Ukraine border"
+    }
+  ],
+  "date_check": {
+    "body": "First reported Thursday 19 Nov, so NOT shown as Friday's news: the Trump-Xi-Putin Shenzhen summit itself · Anthropic's $83 IPO pricing & Nasdaq debut · ICJ Myanmar Rohingya genocide verdict · GTA VI midnight launch · the $190.4m Van Gogh sale",
+    "title": "DATE CHECK"
+  },
+  "edition": {
+    "brand": "THE WORLD IN ONE DAY",
+    "footer_claim": "Every story here happened, or was first reported, on Friday 20 November 2026 in at least one time zone. Claims are attributed, not stated as fact.",
+    "footer_sources": "Sources: Reuters, AP, AFP, BBC, IMD, UN News, Al Jazeera, ICC, EU Council, PBOC.  Original drawings.",
+    "masthead": "Friday 20 November 2026",
+    "strapline": "Cyclone Akvan strikes India  ·  Ballistic missiles hit Kyiv  ·  COP31 deadlocked on final day  ·  Asian AI sell-off",
+    "top_right": "FRIDAY'S NEWS · ONE PAGE · 38 STORIES · 6 CONTINENTS"
+  },
+  "features": [
+    {
+      "caption": "Nikkei -4.5%, KOSPI -4.7%, SoftBank -16%.",
+      "headline": "AI sell-off sinks Asia to worst week since 2020",
+      "icon": "chart",
+      "kicker": "SEOUL / TOKYO — MARKETS",
+      "n": "04",
+      "source": "Reuters"
+    },
+    {
+      "caption": "ESA/JAXA probe ends 6bn-mile trip; orbit insertion set for Saturday.",
+      "headline": "BepiColombo reaches Mercury after 8 years",
+      "icon": "orbit",
+      "kicker": "MERCURY — SPACE",
+      "n": "05",
+      "source": "ESA, BBC"
+    },
+    {
+      "caption": "Costa & von der Leyen host UK PM; agrifood & carbon links eyed.",
+      "headline": "Burnham holds first EU-UK reset summit",
+      "icon": "flags",
+      "kicker": "BRUSSELS — EUROPE",
+      "n": "06",
+      "source": "EU Council"
+    },
+    {
+      "caption": "Oct headline CPI up from 2.1%; core above 2% for second month.",
+      "headline": "Japan inflation hits 2.3%; BoJ hike eyed",
+      "icon": "bars",
+      "kicker": "TOKYO — ECONOMY",
+      "n": "07",
+      "source": "Reuters"
+    },
+    {
+      "caption": "1-year LPR stays at 3.0%, 5-year at 3.5%, as expected.",
+      "headline": "China holds lending rates for 18th month",
+      "icon": "percent",
+      "kicker": "BEIJING — RATES",
+      "n": "08",
+      "source": "PBOC, Reuters"
+    },
+    {
+      "caption": "First NZ batter with centuries in all 3 formats vs India in a year; NZ 368.",
+      "headline": "Phillips makes history with 118 vs India",
+      "icon": "cricket",
+      "kicker": "WELLINGTON — CRICKET",
+      "n": "09",
+      "source": "ICC, AP"
+    },
+    {
+      "caption": "Files with electoral tribunal for Feb 2027 vote; rights groups object.",
+      "headline": "Bukele registers for third term",
+      "icon": "ballot",
+      "kicker": "SAN SALVADOR — POLITICS",
+      "n": "10",
+      "source": "AP"
+    },
+    {
+      "caption": "Dozens missing from 50-100 aboard as Canary arrivals surge.",
+      "headline": "Migrant boat capsizes off Yenne; 4 dead",
+      "icon": "boat",
+      "kicker": "SENEGAL — MIGRATION",
+      "n": "11",
+      "source": "Al Jazeera"
+    },
+    {
+      "caption": "Unions rally in ~100 squares against 2027 budget; transit hit.",
+      "headline": "Italy's CGIL holds 24-hr general strike",
+      "icon": "placard",
+      "kicker": "ROME — LABOUR",
+      "n": "12",
+      "source": "CGIL, AFP"
+    },
+    {
+      "caption": "Daraxonrasib + chemo beats chemo alone.",
+      "headline": "Pancreatic cancer pill shrinks tumours 60.7%",
+      "icon": "pill",
+      "kicker": "BARCELONA — HEALTH",
+      "n": "13",
+      "source": "Reuters"
+    }
+  ],
+  "leads": [
+    {
+      "art": "cyclone",
+      "caption": "Storm crosses near Gopalpur; 300,000+ evacuated, winds 90-100 gusting 110 km/h, 423 rescue teams, 69 trains cancelled, schools shut.",
+      "headline": "Cyclone Akvan makes landfall in eastern India",
+      "kicker": "ODISHA, INDIA — CYCLONE",
+      "n": "01",
+      "source": "IMD, The Hindu"
+    },
+    {
+      "art": "missiles",
+      "caption": "Seven overnight waves hit energy and transport sites; fires in three districts; Dutch and Austrian embassies damaged.",
+      "headline": "Russia fires wave of ~30 ballistic missiles at Kyiv",
+      "kicker": "KYIV, UKRAINE — WAR",
+      "n": "02",
+      "source": "Kyiv Post, Reuters"
+    },
+    {
+      "art": "climate",
+      "caption": "Closing draft omits fossil-fuel phase-out while $120bn adaptation finance stays unresolved; hosts push \"35 by 35\" clean-power goal.",
+      "headline": "COP31 reaches its final day deadlocked",
+      "kicker": "ANTALYA, TÜRKİYE — CLIMATE",
+      "n": "03",
+      "source": "UN News, Reuters"
+    }
+  ],
+  "numbers": [
+    {
+      "big": "300,000+",
+      "caption": "evacuated ahead of Cyclone Akvan"
+    },
+    {
+      "big": "~30",
+      "caption": "ballistic missiles fired at Kyiv"
+    },
+    {
+      "big": "-7%",
+      "caption": "Asia shares' worst week since 2020"
+    },
+    {
+      "big": "2.3%",
+      "caption": "Japan Oct headline CPI; BoJ eyed"
+    },
+    {
+      "big": "118",
+      "caption": "Phillips' historic century vs India"
+    },
+    {
+      "big": "8 yrs",
+      "caption": "BepiColombo reaches Mercury"
+    }
+  ],
+  "pins": [
+    {
+      "n": 1,
+      "x": 0.66,
+      "y": 0.44
+    },
+    {
+      "n": 2,
+      "x": 0.545,
+      "y": 0.26
+    },
+    {
+      "n": 3,
+      "x": 0.575,
+      "y": 0.34
+    },
+    {
+      "n": 4,
+      "x": 0.83,
+      "y": 0.36
+    },
+    {
+      "n": 5,
+      "x": 0.06,
+      "y": 0.06
+    },
+    {
+      "n": 6,
+      "x": 0.485,
+      "y": 0.24
+    },
+    {
+      "n": 7,
+      "x": 0.865,
+      "y": 0.38
+    },
+    {
+      "n": 8,
+      "x": 0.76,
+      "y": 0.36
+    },
+    {
+      "n": 9,
+      "x": 0.96,
+      "y": 0.88
+    },
+    {
+      "n": 10,
+      "x": 0.16,
+      "y": 0.48
+    },
+    {
+      "n": 11,
+      "x": 0.44,
+      "y": 0.5
+    },
+    {
+      "n": 12,
+      "x": 0.505,
+      "y": 0.31
+    },
+    {
+      "n": 13,
+      "x": 0.465,
+      "y": 0.29
+    }
+  ],
+  "regions": [
+    {
+      "color": "#2f5d8a",
+      "count": 8,
+      "name": "EUROPE"
+    },
+    {
+      "color": "#c1272d",
+      "count": 7,
+      "name": "AMERICAS"
+    },
+    {
+      "color": "#d97706",
+      "count": 10,
+      "name": "ASIA-PACIFIC"
+    },
+    {
+      "color": "#6d8f3f",
+      "count": 3,
+      "name": "MIDEAST"
+    },
+    {
+      "color": "#7c4d9e",
+      "count": 3,
+      "name": "AFRICA"
+    },
+    {
+      "color": "#0f766e",
+      "count": 5,
+      "name": "OCEANIA"
+    },
+    {
+      "color": "#334155",
+      "count": 2,
+      "name": "WORLD / SPACE"
+    }
+  ]
+}
