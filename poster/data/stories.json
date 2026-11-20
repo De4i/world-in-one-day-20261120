@@ -40,7 +40,7 @@
       "n": 20,
       "place": "TONGA",
       "source": "RNZ",
-      "text": "Emergency declared as El Niño drought bites"
+      "text": "Emergency declared as El Ni\u00f1o drought bites"
     },
     {
       "n": 21,
@@ -52,7 +52,7 @@
       "n": 22,
       "place": "LONDON",
       "source": "BBC",
-      "text": "UK & Norway: £100m+ for 2 Ukrainian vessels"
+      "text": "UK & Norway: \u00a3100m+ for 2 Ukrainian vessels"
     },
     {
       "n": 23,
@@ -151,24 +151,28 @@
       "text": "Unknown objects probed near Ukraine border"
     }
   ],
-  "date_check": {
-    "body": "First reported Thursday 19 Nov, so NOT shown as Friday's news: the Trump-Xi-Putin Shenzhen summit itself · Anthropic's $83 IPO pricing & Nasdaq debut · ICJ Myanmar Rohingya genocide verdict · GTA VI midnight launch · the $190.4m Van Gogh sale",
-    "title": "DATE CHECK"
-  },
   "edition": {
     "brand": "THE WORLD IN ONE DAY",
-    "footer_claim": "Every story here happened, or was first reported, on Friday 20 November 2026 in at least one time zone. Claims are attributed, not stated as fact.",
+    "footer_claim": "Every story here happened, or was first reported, on Friday 20 November 2026. Claims are attributed, not stated as fact.",
     "footer_sources": "Sources: Reuters, AP, AFP, BBC, IMD, UN News, Al Jazeera, ICC, EU Council, PBOC.  Original drawings.",
     "masthead": "Friday 20 November 2026",
-    "strapline": "Cyclone Akvan strikes India  ·  Ballistic missiles hit Kyiv  ·  COP31 deadlocked on final day  ·  Asian AI sell-off",
-    "top_right": "FRIDAY'S NEWS · ONE PAGE · 38 STORIES · 6 CONTINENTS"
+    "strapline": "Cyclone Akvan strikes India  \u00b7  Ballistic missiles hit Kyiv  \u00b7  COP31 deadlocked on final day  \u00b7  Asian AI sell-off",
+    "top_right": "FRIDAY'S NEWS \u00b7 ONE PAGE \u00b7 38 STORIES \u00b7 6 CONTINENTS"
   },
   "features": [
+    {
+      "caption": "Closing draft omits fossil-fuel phase-out while $120bn adaptation finance stays unresolved; hosts push \"35 by 35\" clean-power goal.",
+      "headline": "COP31 reaches its final day deadlocked",
+      "icon": "climate",
+      "kicker": "ANTALYA, T\u00dcRK\u0130YE \u2014 CLIMATE",
+      "n": "03",
+      "source": "UN News, Reuters"
+    },
     {
       "caption": "Nikkei -4.5%, KOSPI -4.7%, SoftBank -16%.",
       "headline": "AI sell-off sinks Asia to worst week since 2020",
       "icon": "chart",
-      "kicker": "SEOUL / TOKYO — MARKETS",
+      "kicker": "SEOUL / TOKYO \u2014 MARKETS",
       "n": "04",
       "source": "Reuters"
     },
@@ -176,7 +180,7 @@
       "caption": "ESA/JAXA probe ends 6bn-mile trip; orbit insertion set for Saturday.",
       "headline": "BepiColombo reaches Mercury after 8 years",
       "icon": "orbit",
-      "kicker": "MERCURY — SPACE",
+      "kicker": "MERCURY \u2014 SPACE",
       "n": "05",
       "source": "ESA, BBC"
     },
@@ -184,7 +188,7 @@
       "caption": "Costa & von der Leyen host UK PM; agrifood & carbon links eyed.",
       "headline": "Burnham holds first EU-UK reset summit",
       "icon": "flags",
-      "kicker": "BRUSSELS — EUROPE",
+      "kicker": "BRUSSELS \u2014 EUROPE",
       "n": "06",
       "source": "EU Council"
     },
@@ -192,7 +196,7 @@
       "caption": "Oct headline CPI up from 2.1%; core above 2% for second month.",
       "headline": "Japan inflation hits 2.3%; BoJ hike eyed",
       "icon": "bars",
-      "kicker": "TOKYO — ECONOMY",
+      "kicker": "TOKYO \u2014 ECONOMY",
       "n": "07",
       "source": "Reuters"
     },
@@ -200,7 +204,7 @@
       "caption": "1-year LPR stays at 3.0%, 5-year at 3.5%, as expected.",
       "headline": "China holds lending rates for 18th month",
       "icon": "percent",
-      "kicker": "BEIJING — RATES",
+      "kicker": "BEIJING \u2014 RATES",
       "n": "08",
       "source": "PBOC, Reuters"
     },
@@ -208,7 +212,7 @@
       "caption": "First NZ batter with centuries in all 3 formats vs India in a year; NZ 368.",
       "headline": "Phillips makes history with 118 vs India",
       "icon": "cricket",
-      "kicker": "WELLINGTON — CRICKET",
+      "kicker": "WELLINGTON \u2014 CRICKET",
       "n": "09",
       "source": "ICC, AP"
     },
@@ -216,7 +220,7 @@
       "caption": "Files with electoral tribunal for Feb 2027 vote; rights groups object.",
       "headline": "Bukele registers for third term",
       "icon": "ballot",
-      "kicker": "SAN SALVADOR — POLITICS",
+      "kicker": "SAN SALVADOR \u2014 POLITICS",
       "n": "10",
       "source": "AP"
     },
@@ -224,7 +228,7 @@
       "caption": "Dozens missing from 50-100 aboard as Canary arrivals surge.",
       "headline": "Migrant boat capsizes off Yenne; 4 dead",
       "icon": "boat",
-      "kicker": "SENEGAL — MIGRATION",
+      "kicker": "SENEGAL \u2014 MIGRATION",
       "n": "11",
       "source": "Al Jazeera"
     },
@@ -232,7 +236,7 @@
       "caption": "Unions rally in ~100 squares against 2027 budget; transit hit.",
       "headline": "Italy's CGIL holds 24-hr general strike",
       "icon": "placard",
-      "kicker": "ROME — LABOUR",
+      "kicker": "ROME \u2014 LABOUR",
       "n": "12",
       "source": "CGIL, AFP"
     },
@@ -240,7 +244,7 @@
       "caption": "Daraxonrasib + chemo beats chemo alone.",
       "headline": "Pancreatic cancer pill shrinks tumours 60.7%",
       "icon": "pill",
-      "kicker": "BARCELONA — HEALTH",
+      "kicker": "BARCELONA \u2014 HEALTH",
       "n": "13",
       "source": "Reuters"
     }
@@ -250,7 +254,7 @@
       "art": "cyclone",
       "caption": "Storm crosses near Gopalpur; 300,000+ evacuated, winds 90-100 gusting 110 km/h, 423 rescue teams, 69 trains cancelled, schools shut.",
       "headline": "Cyclone Akvan makes landfall in eastern India",
-      "kicker": "ODISHA, INDIA — CYCLONE",
+      "kicker": "ODISHA, INDIA \u2014 CYCLONE",
       "n": "01",
       "source": "IMD, The Hindu"
     },
@@ -258,17 +262,9 @@
       "art": "missiles",
       "caption": "Seven overnight waves hit energy and transport sites; fires in three districts; Dutch and Austrian embassies damaged.",
       "headline": "Russia fires wave of ~30 ballistic missiles at Kyiv",
-      "kicker": "KYIV, UKRAINE — WAR",
+      "kicker": "KYIV, UKRAINE \u2014 WAR",
       "n": "02",
       "source": "Kyiv Post, Reuters"
-    },
-    {
-      "art": "climate",
-      "caption": "Closing draft omits fossil-fuel phase-out while $120bn adaptation finance stays unresolved; hosts push \"35 by 35\" clean-power goal.",
-      "headline": "COP31 reaches its final day deadlocked",
-      "kicker": "ANTALYA, TÜRKİYE — CLIMATE",
-      "n": "03",
-      "source": "UN News, Reuters"
     }
   ],
   "numbers": [
@@ -277,12 +273,12 @@
       "caption": "evacuated ahead of Cyclone Akvan"
     },
     {
-      "big": "~30",
-      "caption": "ballistic missiles fired at Kyiv"
+      "big": "7",
+      "caption": "overnight waves of strikes on Kyiv"
     },
     {
       "big": "-7%",
-      "caption": "Asia shares' worst week since 2020"
+      "caption": "MSCI Asia-Pacific weekly fall, worst since 2020"
     },
     {
       "big": "2.3%",
@@ -300,68 +296,77 @@
   "pins": [
     {
       "n": 1,
-      "x": 0.66,
-      "y": 0.44
+      "x": 0.709722,
+      "y": 0.426429
     },
     {
       "n": 2,
-      "x": 0.545,
-      "y": 0.26
+      "x": 0.556944,
+      "y": 0.211429
     },
     {
+      "dx": 2,
+      "dy": 2,
       "n": 3,
-      "x": 0.575,
-      "y": 0.34
+      "x": 0.5575,
+      "y": 0.307857
     },
     {
+      "dx": 2,
+      "dy": -3,
       "n": 4,
-      "x": 0.83,
-      "y": 0.36
+      "x": 0.825,
+      "y": 0.302857
     },
     {
-      "n": 5,
-      "x": 0.06,
-      "y": 0.06
-    },
-    {
+      "dx": -3,
+      "dy": -3,
       "n": 6,
-      "x": 0.47,
-      "y": 0.19
+      "x": 0.484167,
+      "y": 0.208571
     },
     {
+      "dx": 4,
+      "dy": 3,
       "n": 7,
-      "x": 0.865,
-      "y": 0.38
+      "x": 0.860278,
+      "y": 0.316429
     },
     {
+      "dx": -4,
+      "dy": -1,
       "n": 8,
-      "x": 0.76,
-      "y": 0.36
+      "x": 0.795556,
+      "y": 0.286429
     },
     {
       "n": 9,
-      "x": 0.96,
-      "y": 0.88
+      "x": 0.957778,
+      "y": 0.866429
     },
     {
       "n": 10,
-      "x": 0.16,
-      "y": 0.48
+      "x": 0.224444,
+      "y": 0.473571
     },
     {
       "n": 11,
-      "x": 0.44,
-      "y": 0.5
+      "x": 0.423889,
+      "y": 0.466429
     },
     {
+      "dx": 4,
+      "dy": 2,
       "n": 12,
-      "x": 0.505,
-      "y": 0.31
+      "x": 0.506944,
+      "y": 0.272143
     },
     {
+      "dx": -4,
+      "dy": 3,
       "n": 13,
-      "x": 0.465,
-      "y": 0.29
+      "x": 0.478333,
+      "y": 0.275714
     }
   ],
   "regions": [
