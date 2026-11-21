@@ -278,7 +278,7 @@
     },
     {
       "big": "-7%",
-      "caption": "Asia shares' worst week since 2020"
+      "caption": "MSCI Asia-Pacific weekly fall, worst since 2020"
     },
     {
       "big": "2.3%",
@@ -405,5 +405,9 @@
       "count": 2,
       "name": "WORLD / SPACE"
     }
-  ]
+  ],
+  "date_check": {
+    "body": "First reported Thursday 19 Nov, so NOT shown as Friday's news: the Trump-Xi-Putin Shenzhen summit itself · Anthropic's $83 IPO pricing & Nasdaq debut · ICJ Myanmar Rohingya genocide verdict · GTA VI midnight launch · the $190.4m Van Gogh sale",
+    "title": "DATE CHECK"
+  }
 }
