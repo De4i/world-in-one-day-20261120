@@ -77,8 +77,8 @@ MARGIN = 16
 X1 = SIZE - MARGIN
 INNER = X1 - MARGIN
 
-LEAD_ART_H = 102               # lead illustration band height (v6: taller, rank-1 density)
-FEAT_ART_H = 58                # feature graphic band height (v6: taller, rank-1 density)
+LEAD_ART_H = 98               # lead illustration band height (v6: taller, rank-1 density)
+FEAT_ART_H = 54                # feature graphic band height (v6: taller, rank-1 density)
 
 _font_cache: dict[tuple[str, int], ImageFont.FreeTypeFont] = {}
 
@@ -148,6 +148,40 @@ def tag(draw, x: int, y: int, text: str, fnt, bg, fg) -> int:
     return w
 
 
+def banner(draw, x: int, y: int, text: str, fnt) -> int:
+    """Red in-art headline banner, top-left of a panel (rank-1 pattern)."""
+    w = int(text_w(draw, text, fnt)) + 14
+    h = fnt.size + 6
+    draw.rectangle([x, y, x + w, y + h], fill=RED)
+    bbox = draw.textbbox((0, 0), text, font=fnt)
+    draw.text((x + 7 - bbox[0], y + (h - (bbox[3] - bbox[1])) / 2 - bbox[1]),
+              text, font=fnt, fill=WHITE)
+    return w
+
+
+def chip(draw, x: int, y: int, text: str) -> int:
+    """Small black source/evidence chip inside a panel (rank-1 pattern)."""
+    fnt = font(SANS, 8)
+    w = int(text_w(draw, text, fnt)) + 10
+    draw.rectangle([x, y, x + w, y + 12], fill=(8, 10, 14))
+    draw.text((x + 5, y + 2), text, font=fnt, fill=(235, 235, 235))
+    return w
+
+
+def chip_w(draw, text: str) -> int:
+    return int(text_w(draw, text, font(SANS, 8))) + 10
+
+
+def num_chip(draw, cx: float, cy: float, r: int, n: str, fnt) -> None:
+    """Blue circle story-number chip (rank-1 pattern)."""
+    draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(27, 58, 128))
+    label = str(int(n))
+    tw = text_w(draw, label, fnt)
+    bbox = draw.textbbox((0, 0), label, font=fnt)
+    draw.text((cx - tw / 2 - bbox[0], cy - (bbox[3] - bbox[1]) / 2 - bbox[1]),
+              label, font=fnt, fill=WHITE)
+
+
 # --------------------------------------------------------------------------
 # Lead illustrations — full bands, hand-drawn with Pillow shapes
 # --------------------------------------------------------------------------
@@ -186,7 +220,7 @@ def art_cyclone(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int]) -> No
     draw.ellipse([cx - 6, cy - 6, cx + 6, cy + 6], fill=WHITE)
     draw.ellipse([cx - 3, cy - 3, cx + 3, cy + 3], fill=RED)
     # sea label on a sea-coloured plate, stamped over the spiral's rim
-    tag(draw, x0 + 8, y0 + 6, "BAY OF BENGAL", font(SANS_BOLD, 11),
+    tag(draw, x0 + 8, y0 + 28, "BAY OF BENGAL", font(SANS_BOLD, 11),
         PANEL, (226, 234, 244))
     # dashed forecast track from the eye to the landfall marker
     mx, my = x1 - 64, y0 + 44
@@ -219,8 +253,8 @@ def art_missiles(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int]) -> N
         sy = y0 + (i * 29 + 7) % max(1, int(hgt * 0.55)) + 3
         draw.point((sx, sy), fill=(220, 228, 245))
     # crescent moon, top left
-    draw.ellipse([x0 + 15, y0 + 5, x0 + 29, y0 + 19], fill=(228, 233, 245))
-    draw.ellipse([x0 + 20, y0 + 3, x0 + 34, y0 + 17], fill=(13, 20, 42))
+    draw.ellipse([x0 + 74, y0 + 5, x0 + 88, y0 + 19], fill=(228, 233, 245))
+    draw.ellipse([x0 + 79, y0 + 3, x0 + 93, y0 + 17], fill=(13, 20, 42))
     # skyline: black blocks with lit windows, standing over the river band
     base = y1 - 12
     widths = [36, 24, 42, 28, 50, 26, 40, 30, 48]
@@ -271,12 +305,12 @@ def art_climate(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int]) -> No
     draw.ellipse([sx - 8, sy - 8, sx + 8, sy + 8], fill=(245, 178, 60))
     # thermometer: white tube, mercury high in the red, big bulb
     tx = x0 + 52
-    draw.rectangle([tx - 7, y0 + 10, tx + 7, y0 + 62], fill=WHITE)
-    draw.rectangle([tx - 3, y0 + 18, tx + 3, y0 + 74], fill=RED)
-    draw.ellipse([tx - 12, y0 + 60, tx + 12, y0 + 84], fill=RED,
+    draw.rectangle([tx - 7, y0 + 24, tx + 7, y0 + 66], fill=WHITE)
+    draw.rectangle([tx - 3, y0 + 30, tx + 3, y0 + 76], fill=RED)
+    draw.ellipse([tx - 12, y0 + 64, tx + 12, y0 + 88], fill=RED,
                  outline=WHITE, width=2)
     for i in range(4):
-        ty = y0 + 15 + i * 11
+        ty = y0 + 29 + i * 11
         draw.line([(tx + 10, ty), (tx + 16, ty)], fill=(200, 212, 230),
                   width=1)
     # two arrows driving at each other, split by a crack: the deadlock
@@ -302,6 +336,12 @@ def art_climate(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int]) -> No
 
 LEAD_ART = {"cyclone": art_cyclone, "missiles": art_missiles, "climate": art_climate}
 
+LEAD_BANNERS = {"01": "CYCLONE AKVAN", "02": "KYIV", "03": "COP31: DEADLOCK"}
+FEAT_BANNERS = {"04": "AI SELL-OFF", "05": "MERCURY", "06": "EU-UK RESET",
+                "07": "JAPAN: +2.3%", "08": "CHINA RATES", "09": "PHILLIPS: 118",
+                "10": "BUKELE: 3RD BID", "11": "SENEGAL BOAT",
+                "12": "ITALY: STRIKE", "13": "CANCER PILL"}
+
 # --------------------------------------------------------------------------
 # Feature graphics — one drawn band per story, specific to its subject
 # --------------------------------------------------------------------------
@@ -324,9 +364,9 @@ def feat_chart(draw, box) -> None:
     draw.polygon([(x1 - 14, y1 - 8), (x1 - 25, y1 - 9), (x1 - 18, y1 - 18)],
                  fill=RED)
     # the two index falls, as in-art data labels
-    draw.text((x0 + 8, y0 + 7), "NIKKEI -4.5%", font=font(SANS_BOLD, 11),
+    draw.text((x0 + 8, y0 + 24), "NIKKEI -4.5%", font=font(SANS_BOLD, 11),
               fill=WHITE)
-    draw.text((x0 + 8, y0 + 21), "KOSPI -4.7%", font=font(SANS_BOLD, 11),
+    draw.text((x0 + 8, y0 + 38), "KOSPI -4.7%", font=font(SANS_BOLD, 11),
               fill=(255, 150, 150))
     draw.rectangle(box, outline=RULE)
 
@@ -352,8 +392,6 @@ def feat_orbit(draw, box) -> None:
     draw.rectangle([px - 9, py + 3, px - 2, py + 8], fill=(140, 200, 255))
     draw.ellipse([px - 3, py - 3, px + 3, py + 3], fill=WHITE)
     draw.ellipse([x1 - 29, y1 - 19, x1 - 19, y1 - 9], fill=(200, 205, 215))
-    draw.text((x0 + 8, y0 + 5), "MERCURY", font=font(SANS_BOLD, 9),
-              fill=(240, 196, 130))
     tag(draw, x0 + 8, y1 - 18, "6BN MILES", font(SANS_BOLD, 9), RED, WHITE)
     draw.rectangle(box, outline=RULE)
 
@@ -478,7 +516,7 @@ def feat_boat(draw, box) -> None:
     """11 — boat hull on scalloped waves, night sea."""
     x0, y0, x1, y1 = box
     draw.rectangle(box, fill=(13, 28, 52))
-    tag(draw, x0 + 8, y0 + 6, "4 DEAD", font(SANS_BOLD, 10), RED, WHITE)
+    tag(draw, x0 + 8, y1 - 18, "4 DEAD", font(SANS_BOLD, 10), RED, WHITE)
     draw.ellipse([x1 - 29, y0 + 5, x1 - 19, y0 + 15], fill=(225, 232, 245))
     cx = (x0 + x1) // 2
     draw.line([(cx, y0 + 6), (cx, y0 + 23)], fill=(230, 235, 240), width=2)
@@ -683,7 +721,7 @@ def draw_map(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int],
         px = x0 + int(pin["x"] * wdt) + pin.get("dx", 0)
         py = y0 + int(pin["y"] * hgt) + pin.get("dy", 0)
         label = str(pin["n"])
-        draw.ellipse([px - 7, py - 7, px + 7, py + 7], fill=RED,
+        draw.ellipse([px - 7, py - 7, px + 7, py + 7], fill=(27, 58, 128),
                      outline=WHITE, width=1)
         tw = text_w(draw, label, pin_font)
         draw.text((px - tw / 2, py - 5), label, font=pin_font, fill=WHITE)
@@ -778,8 +816,19 @@ def section_leads(draw, data: dict, y: int) -> int:
             draw.line([(x - gap / 2, y), (x - gap / 2, y + 236)], fill=RULE, width=1)
         art_box = (int(x), y, int(x + col_w), y + LEAD_ART_H)
         LEAD_ART[lead["art"]](draw, art_box)
+        banner(draw, art_box[0], art_box[1],
+               LEAD_BANNERS[lead["n"]], font(SANS_BOLD, 13))
+        src = lead["source"].replace(", ", " · ")
+        if lead["n"] == "01":
+            chip(draw, art_box[0] + 6, art_box[3] - 19 - 14, src)
+        elif lead["n"] == "03":
+            chip(draw, art_box[0] + 96, art_box[3] - 14, src)
+        else:
+            chip(draw, art_box[2] - chip_w(draw, src) - 6,
+                 art_box[3] - 14, src)
         cy = y + LEAD_ART_H + 6
-        draw.text((x, cy), f'{lead["n"]}  {lead["kicker"]}', font=kick_f, fill=RED)
+        num_chip(draw, x + 7, cy + 6, 7, lead["n"], font(SANS_BOLD, 9))
+        draw.text((x + 18, cy), lead["kicker"], font=kick_f, fill=RED)
         cy += 15
         lines = wrap(draw, lead["headline"], head_f, col_w)
         cy = draw_lines(draw, lines, x, cy, head_f, INK, 27)
@@ -808,9 +857,16 @@ def section_features(draw, data: dict, y: int) -> int:
                 draw.line([(x - gap / 2, y), (x - gap / 2, y + 140)], fill=RULE, width=1)
             art_box = (int(x), y, int(x + col_w), y + FEAT_ART_H)
             FEAT_ART[feat["icon"]](draw, art_box)
-            kick = f'{feat["n"]} · {feat["kicker"]}'
-            kf = fit_font(draw, kick, SANS_BOLD, 10, col_w, minimum=8)
-            draw.text((x, y + FEAT_ART_H + 3), kick, font=kf, fill=RED)
+            banner(draw, art_box[0], art_box[1],
+                   FEAT_BANNERS[feat["n"]], font(SANS_BOLD, 10))
+            src = feat["source"].replace(", ", " · ")
+            chip(draw, art_box[2] - chip_w(draw, src) - 4,
+                 art_box[3] - 14, src)
+            kick = feat["kicker"]
+            kf = fit_font(draw, kick, SANS_BOLD, 10, col_w - 15, minimum=8)
+            num_chip(draw, x + 6, y + FEAT_ART_H + 3 + 5, 6, feat["n"],
+                     font(SANS_BOLD, 8))
+            draw.text((x + 15, y + FEAT_ART_H + 3), kick, font=kf, fill=RED)
             cy = y + FEAT_ART_H + 14
             lines = wrap(draw, feat["headline"], head_f, col_w)
             cy = draw_lines(draw, lines, x, cy, head_f, INK, 18)
@@ -830,9 +886,9 @@ def section_bottom(draw, data: dict, y: int) -> int:
     map_w = 348
     head_f = font(SANS_BOLD, 14)
     draw.text((MARGIN, y), "WHERE IT HAPPENED", font=head_f, fill=INK)
-    draw.text((MARGIN, y + 15), "Pins 1-13: the leads and features above",
+    draw.text((MARGIN, y + 15), "Each number is the story with that number on this page.",
               font=font(SANS_ITALIC, 11), fill=INK_SOFT)
-    draw_map(draw, (MARGIN, y + 30, MARGIN + map_w, y + 198), data["pins"])
+    draw_map(draw, (MARGIN, y + 30, MARGIN + map_w, y + 190), data["pins"])
     # Briefs, to the right of the map.
     bx = MARGIN + map_w + 16
     bw = X1 - bx
@@ -846,7 +902,7 @@ def section_bottom(draw, data: dict, y: int) -> int:
     for idx, brief in enumerate(data["briefs"]):
         col, row = divmod(idx, per_col)
         x = bx + col * (col_w + 12)
-        yy = y + 33 + row * 13.9
+        yy = y + 33 + row * 13.4
         draw.text((x, yy), f'{brief["n"]}', font=num_f, fill=RED)
         nx = x + text_w(draw, f'{brief["n"]}', num_f) + 4
         draw.text((nx, yy), brief["place"], font=place_f, fill=INK)
@@ -854,11 +910,19 @@ def section_bottom(draw, data: dict, y: int) -> int:
         # One line only: shrink just this line if it would spill over.
         bf = fit_font(draw, brief["text"], SANS, 12, x + col_w - px, minimum=9)
         draw.text((px, yy), brief["text"], font=bf, fill=INK_SOFT)
-    return y + 213
+    return y + 205
 
 
 def section_close(draw, data: dict, y: int) -> int:
-    """The attribution footer (the date-check box is gone in v5)."""
+    """Thin date-check strip (rank-1 weight) and the attribution footer."""
+    dc = data["date_check"]
+    draw.rectangle([MARGIN, y, X1, y + 26], outline=RED, width=1)
+    draw.text((MARGIN + 8, y + 8), "DATE CHECK", font=font(SANS_BOLD, 9),
+              fill=RED)
+    body_f = font(SANS, 9)
+    lines = wrap(draw, dc["body"], body_f, INNER - 92)
+    draw_lines(draw, lines[:2], MARGIN + 84, y + 3, body_f, INK_SOFT, 11)
+    y += 31
     ed = data["edition"]
     claim_f = fit_font(draw, ed["footer_claim"], SANS_BOLD, 12, INNER)
     cw = text_w(draw, ed["footer_claim"], claim_f)
