@@ -8,22 +8,22 @@ poster/data/stories.json.
 
 Design notes
 ------------
-* V5 surgical revision of the v4 hybrid (v2's page — cream newsprint,
-  dark-navy ink, red accents, same layout skeleton).  Changes only:
-  the cyclone becomes a single hero lead (~50% of the lead row, storm
-  spiral art) beside the Kyiv lead; COP31 is demoted to a feature card;
-  the date-check box is deleted and its space goes to the lead row;
-  the stat strip no longer repeats "~30 missiles" and labels the -7%
-  as the MSCI Asia-Pacific weekly fall; all 25 briefs print at one
-  uniform size; the boat and Mercury glyphs gain simple shading.
-* The world map is solid-fill and geographically honest: continent
-  polygons are coded in longitude/latitude and projected
-  equirectangularly (x from -170..190, y from 80..-60), and the pins
-  for stories 01-13 sit at their true lon/lat positions (pin 05,
-  Mercury, lives in a SPACE callout beside the map, not on it).
+* V6: v2's page — cream newsprint, dark-navy ink, red accents,
+  same layout — with the art density of the top entries.  The three lead
+  stories and all ten feature modules now carry full dark-navy art
+  panels with bold in-art data tags in the rank-4 style (a labelled
+  map panel for the cyclone with a "LANDFALL · GUSTS 110 KM/H" banner,
+  a Kyiv night panel tagged "~30 MISSILES · 7 WAVES", a COP31 panel
+  with thermometer, deadlock arrows, a red "FINAL DAY · DEADLOCK"
+  badge and a "$120BN FINANCE GAP" tag; feature bands carry their own
+  numbers: index falls, CPI bars against a dashed 2% target, the LPR
+  curve, the 118, the 2027 ballot, "100 SQUARES", "60.7% RESPONSE").
 * Everything is drawn with Pillow primitives: no photographs, no external
   assets, so the render is fully deterministic — two runs produce a
   byte-identical PNG.
+* The world map is solid-fill: hand-coded continent polygons in muted
+  blue-grey on a deep-navy ocean, with numbered pins for stories 01-13
+  stamped on top.
 * If the plain RGB PNG ever exceeds the 1 MiB competition limit, the
   image is palette-quantised (224 colours, median-cut, Floyd-Steinberg
   dithering) inside this script, so the output is always in budget.
@@ -77,10 +77,8 @@ MARGIN = 16
 X1 = SIZE - MARGIN
 INNER = X1 - MARGIN
 
-LEAD_ART_H = 95                # v4 lead band height (kept for reference)
-HERO_ART_H = 126               # hero (cyclone) illustration band height
-KYIV_ART_H = 112               # second lead (Kyiv) illustration band height
-FEAT_ART_H = 44                # feature graphic band height
+LEAD_ART_H = 102               # lead illustration band height (v6: taller, rank-1 density)
+FEAT_ART_H = 58                # feature graphic band height (v6: taller, rank-1 density)
 
 _font_cache: dict[tuple[str, int], ImageFont.FreeTypeFont] = {}
 
@@ -154,63 +152,55 @@ def tag(draw, x: int, y: int, text: str, fnt, bg, fg) -> int:
 # Lead illustrations — full bands, hand-drawn with Pillow shapes
 # --------------------------------------------------------------------------
 
-def art_cyclone_hero(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int]) -> None:
-    """Hero panel: the storm itself — a big cloud spiral with a clear eye
-    over the sea, rain streaks, the Odisha coast small at the right."""
+def art_cyclone(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int]) -> None:
+    """Dark map panel: Odisha coast, spiral fully inside, landfall banner."""
     x0, y0, x1, y1 = box
     draw.rectangle(box, fill=PANEL)
-    # landmass on the right (the Odisha coast): blue-grey land with a
-    # lighter inland inset and a pale coastline stroke
-    coast = [(x1 - 104, y0), (x1 - 84, y0 + 34), (x1 - 66, y1 - 66),
-             (x1 - 82, y1 - 40), (x1 - 62, y1)]
+    # faint swell arcs low in the frame, clear of the banner
+    for wy in (y1 - 30, y1 - 25):
+        for wx in range(x0 + 8, x0 + 108, 26):
+            draw.arc([wx, wy - 4, wx + 16, wy + 4], start=180, end=360,
+                     fill=(58, 92, 138), width=2)
+    # landmass on the right (the Odisha coast, abstracted): blue-grey
+    # land with a lighter inland inset and a pale coastline stroke
+    coast = [(x1 - 96, y0), (x1 - 78, y0 + 24), (x1 - 60, y1 - 62),
+             (x1 - 74, y1 - 38), (x1 - 58, y1)]
     draw.polygon(coast + [(x1, y1), (x1, y0)], fill=(104, 116, 138))
-    draw.polygon([(x1 - 58, y0 + 8), (x1 - 8, y0 + 8), (x1 - 8, y1 - 27),
-                  (x1 - 44, y1 - 27), (x1 - 58, y1 - 50), (x1 - 48, y1 - 68)],
+    draw.polygon([(x1 - 56, y0 + 8), (x1 - 8, y0 + 8), (x1 - 8, y1 - 27),
+                  (x1 - 42, y1 - 27), (x1 - 54, y1 - 45), (x1 - 44, y1 - 62)],
                  fill=(126, 136, 156))
     draw.line(coast, fill=(196, 210, 228), width=2)
     draw.text((x1 - 50, y0 + 9), "ODISHA", font=font(SANS_BOLD, 9),
               fill=(226, 234, 244))
-    # the storm: concentric broken cloud bands tightening to the eye,
-    # centred left so the whole spiral sits over the sea
-    cx, cy = x0 + 178, y0 + 60
+    # the full spiral: concentric broken arcs tightening to the eye,
+    # sized and centred so nothing spills past the panel edges
+    cx, cy = x0 + 86, y0 + 41
     for radius, start, colour, width in (
-            (52, 10, (226, 238, 250), 9), (52, 170, (130, 170, 215), 9),
-            (52, 255, (160, 195, 230), 8),
-            (45, 95, (255, 255, 255), 8), (45, 280, (110, 155, 205), 8),
-            (38, 20, (255, 255, 255), 7), (38, 205, (140, 180, 222), 7),
-            (30, 120, (255, 255, 255), 6), (30, 300, (115, 160, 208), 6),
-            (23, 45, (255, 255, 255), 5), (23, 230, (130, 170, 215), 5),
-            (17, 140, (255, 255, 255), 4), (17, 330, (150, 190, 228), 4),
-            (11, 70, (255, 255, 255), 3)):
+            (35, 15, (255, 255, 255), 7), (35, 195, (130, 170, 215), 7),
+            (28, 105, (255, 255, 255), 6), (28, 285, (110, 155, 205), 6),
+            (21, 30, (255, 255, 255), 5), (21, 215, (95, 140, 195), 5),
+            (14, 130, (255, 255, 255), 4), (14, 320, (120, 160, 210), 4),
+            (8, 60, (255, 255, 255), 3)):
         draw.arc([cx - radius, cy - radius, cx + radius, cy + radius],
-                 start=start, end=start + 135, fill=colour, width=width)
-    # the eye: a calm dark centre ringed in white
-    draw.ellipse([cx - 10, cy - 10, cx + 10, cy + 10], fill=(16, 28, 52),
-                 outline=WHITE, width=3)
-    draw.ellipse([cx - 3, cy - 3, cx + 3, cy + 3], fill=(205, 225, 245))
-    # rain streaks slanting under the spiral's southern half
-    for i in range(15):
-        rx = cx - 66 + (i * 37) % 140
-        ry = cy + 34 + (i * 23) % 44
-        if ry < y1 - 26:
-            draw.line([(rx, ry), (rx - 4, ry + 9)], fill=(95, 150, 205),
-                      width=2)
-    # sea label on a sea-coloured plate, top left
+                 start=start, end=start + 140, fill=colour, width=width)
+    draw.ellipse([cx - 6, cy - 6, cx + 6, cy + 6], fill=WHITE)
+    draw.ellipse([cx - 3, cy - 3, cx + 3, cy + 3], fill=RED)
+    # sea label on a sea-coloured plate, stamped over the spiral's rim
     tag(draw, x0 + 8, y0 + 6, "BAY OF BENGAL", font(SANS_BOLD, 11),
         PANEL, (226, 234, 244))
     # dashed forecast track from the eye to the landfall marker
-    mx, my = x1 - 72, y0 + 58
+    mx, my = x1 - 64, y0 + 44
     steps = 6
     for i in range(steps):
         t0, t1 = i / steps, (i + 0.55) / steps
-        draw.line([(cx + 40 + (mx - cx - 40) * t0, cy - 4 + (my - cy + 4) * t0),
-                   (cx + 40 + (mx - cx - 40) * t1, cy - 4 + (my - cy + 4) * t1)],
+        draw.line([(cx + 29 + (mx - cx - 29) * t0, cy + 3 + (my - cy - 3) * t0),
+                   (cx + 29 + (mx - cx - 29) * t1, cy + 3 + (my - cy - 3) * t1)],
                   fill=(255, 120, 120), width=2)
     draw.ellipse([mx - 6, my - 6, mx + 6, my + 6], outline=(255, 120, 120),
                  width=2)
     draw.ellipse([mx - 2, my - 2, mx + 2, my + 2], fill=RED)
     # place label on a white tag over the land, below the marker
-    tag(draw, x1 - 92, y0 + 78, "GOPALPUR", font(SANS_BOLD, 9), WHITE, INK)
+    tag(draw, x1 - 88, y0 + 56, "GOPALPUR", font(SANS_BOLD, 9), WHITE, INK)
     # red banner along the bottom of the panel, rank-4 style
     draw.rectangle([x0, y1 - 19, x1, y1], fill=RED)
     centred_text(draw, (x0 + x1) / 2, y1 - 16,
@@ -231,28 +221,23 @@ def art_missiles(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int]) -> N
     # crescent moon, top left
     draw.ellipse([x0 + 15, y0 + 5, x0 + 29, y0 + 19], fill=(228, 233, 245))
     draw.ellipse([x0 + 20, y0 + 3, x0 + 34, y0 + 17], fill=(13, 20, 42))
-    # skyline: black blocks with lit windows, tiled across the panel
-    # however wide it is, standing over the river band
+    # skyline: black blocks with lit windows, standing over the river band
     base = y1 - 12
     widths = [36, 24, 42, 28, 50, 26, 40, 30, 48]
     heights = [26, 38, 20, 32, 26, 40, 22, 34, 21]
-    bx, k = x0, 0
-    while bx < x1 - 8:
-        w = min(widths[k % len(widths)], x1 - bx)
-        h = heights[k % len(heights)]
+    bx = x0
+    for w, h in zip(widths, heights):
         draw.rectangle([bx, base - h, bx + w - 2, base], fill=(5, 8, 16))
         for wy in range(base - h + 5, base - 5, 8):
             for wx in (bx + 6, bx + w - 11):
-                if wx < x1 - 4 and (wx + wy) % 3:
+                if (wx + wy) % 3:
                     draw.rectangle([wx, wy, wx + 2, wy + 2], fill=(250, 210, 110))
         bx += w
-        k += 1
     # river band along the bottom, with light sparkles
     draw.rectangle([x0, base, x1, y1], fill=(24, 50, 82))
-    for i in range(int(wdt // 52) + 1):
+    for i in range(6):
         rx = x0 + 18 + i * 52
-        if rx + 16 < x1:
-            draw.line([(rx, y1 - 6), (rx + 16, y1 - 6)], fill=(170, 200, 225), width=1)
+        draw.line([(rx, y1 - 6), (rx + 16, y1 - 6)], fill=(170, 200, 225), width=1)
     # six missile trails dropping toward the city, with glow heads
     trails = [(0.10, 0.04, 0.24, 0.60), (0.26, 0.02, 0.38, 0.65),
               (0.44, 0.05, 0.52, 0.59), (0.60, 0.02, 0.68, 0.64),
@@ -273,40 +258,49 @@ def art_missiles(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int]) -> N
     draw.rectangle(box, outline=RULE)
 
 
-def feat_climate(draw, box) -> None:
-    """03 — COP31 at card size: thermometer, deadlock arrows, red badge."""
+def art_climate(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int]) -> None:
+    """Dark panel: thermometer, deadlock arrows, red COP31 badge, gap tag."""
     x0, y0, x1, y1 = box
     draw.rectangle(box, fill=PANEL)
-    # thermometer: white tube, red mercury, bulb — sized for the card
-    tx = x0 + 17
-    draw.rectangle([tx - 4, y0 + 4, tx + 4, y0 + 27], fill=WHITE)
-    draw.rectangle([tx - 2, y0 + 8, tx + 2, y0 + 32], fill=RED)
-    draw.ellipse([tx - 7, y0 + 25, tx + 7, y0 + 39], fill=RED,
-                 outline=WHITE, width=1)
-    for i in range(3):
-        ty = y0 + 7 + i * 6
-        draw.line([(tx + 6, ty), (tx + 10, ty)], fill=(200, 212, 230),
+    # sun, top right, clear of the badge below it
+    sx, sy = x1 - 26, y0 + 14
+    for dx, dy in ((0, -1), (0, 1), (-1, 0), (1, 0),
+                   (-0.7, -0.7), (0.7, -0.7), (-0.7, 0.7), (0.7, 0.7)):
+        draw.line([(sx + dx * 11, sy + dy * 11), (sx + dx * 16, sy + dy * 16)],
+                  fill=(240, 170, 60), width=2)
+    draw.ellipse([sx - 8, sy - 8, sx + 8, sy + 8], fill=(245, 178, 60))
+    # thermometer: white tube, mercury high in the red, big bulb
+    tx = x0 + 52
+    draw.rectangle([tx - 7, y0 + 10, tx + 7, y0 + 62], fill=WHITE)
+    draw.rectangle([tx - 3, y0 + 18, tx + 3, y0 + 74], fill=RED)
+    draw.ellipse([tx - 12, y0 + 60, tx + 12, y0 + 84], fill=RED,
+                 outline=WHITE, width=2)
+    for i in range(4):
+        ty = y0 + 15 + i * 11
+        draw.line([(tx + 10, ty), (tx + 16, ty)], fill=(200, 212, 230),
                   width=1)
-    # two small arrows driving at each other: the deadlock
-    ay = y0 + 13
-    draw.polygon([(x0 + 38, ay), (x0 + 56, ay), (x0 + 56, ay - 3),
-                  (x0 + 64, ay + 4), (x0 + 56, ay + 11), (x0 + 56, ay + 8),
-                  (x0 + 38, ay + 8)], fill=RED)
-    draw.polygon([(x0 + 94, ay), (x0 + 76, ay), (x0 + 76, ay - 3),
-                  (x0 + 68, ay + 4), (x0 + 76, ay + 11), (x0 + 76, ay + 8),
-                  (x0 + 94, ay + 8)], fill=(226, 234, 244))
-    centred_text(draw, x0 + 66, y0 + 27, "$120BN GAP",
-                 font(SANS_BOLD, 8), (255, 190, 90))
-    # red badge, two lines, at the right — nothing clipped
-    badge = (x1 - 52, y0 + 6, x1 - 6, y0 + 34)
+    # two arrows driving at each other, split by a crack: the deadlock
+    ax, bx = x0 + 104, x0 + 196
+    draw.polygon([(ax, y0 + 36), (ax + 34, y0 + 36), (ax + 34, y0 + 30),
+                  (ax + 48, y0 + 42), (ax + 34, y0 + 54), (ax + 34, y0 + 48),
+                  (ax, y0 + 48)], fill=RED)
+    draw.polygon([(bx, y0 + 36), (bx - 34, y0 + 36), (bx - 34, y0 + 30),
+                  (bx - 48, y0 + 42), (bx - 34, y0 + 54), (bx - 34, y0 + 48),
+                  (bx, y0 + 48)], fill=(226, 234, 244))
+    draw.line([(x0 + 152, y0 + 28), (x0 + 149, y0 + 38), (x0 + 156, y0 + 46),
+               (x0 + 151, y0 + 58)], fill=(240, 200, 90), width=2)
+    # red badge, two lines, and the finance-gap tag under it
+    badge = (x0 + 206, y0 + 32, x1 - 10, y0 + 62)
     draw.rectangle(badge, fill=RED)
     bcx = (badge[0] + badge[2]) / 2
-    centred_text(draw, bcx, y0 + 10, "FINAL DAY", font(SANS_BOLD, 8), WHITE)
-    centred_text(draw, bcx, y0 + 20, "DEADLOCK", font(SANS_BOLD, 8), WHITE)
+    centred_text(draw, bcx, y0 + 36, "FINAL DAY", font(SANS_BOLD, 11), WHITE)
+    centred_text(draw, bcx, y0 + 49, "DEADLOCK", font(SANS_BOLD, 11), WHITE)
+    tag(draw, x0 + 206, y0 + 68, "$120BN FINANCE GAP", font(SANS_BOLD, 9),
+        (10, 16, 30), (255, 190, 90))
     draw.rectangle(box, outline=RULE)
 
 
-LEAD_ART = {"cyclone": art_cyclone_hero, "missiles": art_missiles}
+LEAD_ART = {"cyclone": art_cyclone, "missiles": art_missiles, "climate": art_climate}
 
 # --------------------------------------------------------------------------
 # Feature graphics — one drawn band per story, specific to its subject
@@ -320,10 +314,10 @@ def feat_chart(draw, box) -> None:
         draw.line([(gx, y0 + 3), (gx, y1 - 3)], fill=PANEL_LINE, width=1)
     for gy in range(y0 + 6, y1, 12):
         draw.line([(x0 + 3, gy), (x1 - 3, gy)], fill=PANEL_LINE, width=1)
-    draw.line([(x0 + 88, y0 + 8), (x0 + 116, y0 + 13), (x0 + 140, y0 + 12),
+    draw.line([(x0 + 96, y0 + 8), (x0 + 128, y0 + 13), (x0 + 158, y0 + 12),
                (x1 - 14, y0 + 22)], fill=(120, 130, 155), width=1)
-    pts = [(x0 + 88, y0 + 12), (x0 + 116, y0 + 18), (x0 + 140, y0 + 16),
-           (x0 + 148, y0 + 30), (x1 - 14, y1 - 8)]
+    pts = [(x0 + 96, y0 + 12), (x0 + 128, y0 + 18), (x0 + 158, y0 + 16),
+           (x0 + 172, y0 + 30), (x1 - 14, y1 - 8)]
     draw.line(pts, fill=RED, width=3, joint="curve")
     for px, py in pts[:-1]:
         draw.ellipse([px - 2, py - 2, px + 2, py + 2], fill=WHITE)
@@ -352,12 +346,6 @@ def feat_orbit(draw, box) -> None:
     for dy, half in ((-6, 13), (0, 15), (6, 13)):
         draw.line([(cx - half, cy + dy), (cx + half, cy + dy)],
                   fill=(178, 102, 42), width=3)
-    # simple shading: a darker lower-right crescent and a lit rim, so
-    # the planet reads as a sphere rather than a flat blob
-    draw.arc([cx - 16, cy - 16, cx + 16, cy + 16], start=20, end=130,
-             fill=(150, 82, 30), width=4)
-    draw.arc([cx - 13, cy - 13, cx + 13, cy + 13], start=180, end=290,
-             fill=(245, 190, 110), width=3)
     # the probe, out at the end of its long arc, with a panel and antenna
     px, py = x0 + 150, y0 + 13
     draw.line([(px, py), (px - 8, py - 6)], fill=WHITE, width=1)
@@ -366,6 +354,7 @@ def feat_orbit(draw, box) -> None:
     draw.ellipse([x1 - 29, y1 - 19, x1 - 19, y1 - 9], fill=(200, 205, 215))
     draw.text((x0 + 8, y0 + 5), "MERCURY", font=font(SANS_BOLD, 9),
               fill=(240, 196, 130))
+    tag(draw, x0 + 8, y1 - 18, "6BN MILES", font(SANS_BOLD, 9), RED, WHITE)
     draw.rectangle(box, outline=RULE)
 
 
@@ -397,6 +386,7 @@ def feat_flags(draw, box) -> None:
     draw.rectangle([uk[0], ucy - 2, uk[2], ucy + 2], fill=(200, 30, 45))
     draw.rectangle(eu, outline=(200, 212, 230))
     draw.rectangle(uk, outline=(200, 212, 230))
+    tag(draw, x0 + 57, y1 - 17, "RESET TALKS", font(SANS_BOLD, 8), RED, WHITE)
     draw.rectangle(box, outline=RULE)
 
 
@@ -415,12 +405,12 @@ def feat_bars(draw, box) -> None:
     for dx in range(x0 + 14, x1 - 14, 10):
         draw.line([(dx, ty), (dx + 5, ty)], fill=WHITE, width=1)
     for i, (h, colour) in enumerate(zip(heights, colours)):
-        bx = x0 + 28 + i * 33
-        draw.rectangle([bx, base - h, bx + 22, base], fill=colour)
+        bx = x0 + 28 + i * 37
+        draw.rectangle([bx, base - h, bx + 24, base], fill=colour)
     draw.text((x0 + 12, y0 + 4), "2% TARGET", font=font(SANS_BOLD, 8),
               fill=WHITE)
     # the headline 2.3% over the last, tallest bar
-    draw.text((x0 + 28 + 3 * 33, base - heights[3] - 11), "2.3%",
+    draw.text((x0 + 28 + 3 * 37, base - heights[3] - 11), "2.3%",
               font=font(SANS_BOLD, 10), fill=WHITE)
     draw.rectangle(box, outline=RULE)
 
@@ -488,25 +478,16 @@ def feat_boat(draw, box) -> None:
     """11 — boat hull on scalloped waves, night sea."""
     x0, y0, x1, y1 = box
     draw.rectangle(box, fill=(13, 28, 52))
+    tag(draw, x0 + 8, y0 + 6, "4 DEAD", font(SANS_BOLD, 10), RED, WHITE)
     draw.ellipse([x1 - 29, y0 + 5, x1 - 19, y0 + 15], fill=(225, 232, 245))
     cx = (x0 + x1) // 2
     draw.line([(cx, y0 + 6), (cx, y0 + 23)], fill=(230, 235, 240), width=2)
     draw.polygon([(cx, y0 + 6), (cx + 11, y0 + 9), (cx, y0 + 12)], fill=RED)
-    # a simple two-tone sail behind the mast, lit on the left
-    draw.polygon([(cx - 2, y0 + 8), (cx - 14, y0 + 21), (cx - 2, y0 + 21)],
-                 fill=(232, 236, 242))
-    draw.polygon([(cx - 8, y0 + 12), (cx - 14, y0 + 21), (cx - 8, y0 + 21)],
-                 fill=(198, 208, 222))
     for hx in (cx - 22, cx, cx + 22):
         draw.ellipse([hx - 3, y0 + 16, hx + 3, y0 + 22], fill=WHITE)
     draw.rectangle([x0 + 44, y0 + 23, x1 - 44, y0 + 27], fill=(150, 84, 52))
     draw.polygon([(x0 + 50, y0 + 27), (x1 - 50, y0 + 27), (x1 - 64, y1 - 9),
                   (x0 + 64, y1 - 9)], fill=(178, 92, 58))
-    # hull shading: a pale rim along the gunwale, a darker keel band
-    draw.line([(x0 + 52, y0 + 28), (x1 - 52, y0 + 28)], fill=(226, 160, 120),
-              width=2)
-    draw.polygon([(x0 + 58, y1 - 13), (x1 - 58, y1 - 13), (x1 - 64, y1 - 9),
-                  (x0 + 64, y1 - 9)], fill=(128, 62, 40))
     for row, wy in enumerate((y1 - 16, y1 - 9)):
         for wx in range(x0 + 6 + row * 11, x1 - 18, 22):
             draw.arc([wx, wy - 4, wx + 16, wy + 5], start=180, end=360,
@@ -518,15 +499,15 @@ def feat_placard(draw, box) -> None:
     """12 — placards on sticks over a row of heads; one reads 100 SQUARES."""
     x0, y0, x1, y1 = box
     draw.rectangle(box, fill=PANEL)
-    for px, py in ((x0 + 4, y0 + 6), (x1 - 34, y0 + 6)):
-        draw.line([(px + 15, py + 19), (px + 15, y1 - 12)],
+    for px, py in ((x0 + 10, y0 + 6), (x0 + 140, y0 + 6)):
+        draw.line([(px + 18, py + 19), (px + 18, y1 - 12)],
                   fill=(190, 160, 120), width=2)
-        draw.rectangle([px, py, px + 30, py + 19], fill=WHITE, outline=INK)
-        draw.line([(px + 4, py + 6), (px + 23, py + 6)], fill=RED, width=2)
-        draw.line([(px + 4, py + 12), (px + 19, py + 12)], fill=INK_SOFT,
+        draw.rectangle([px, py, px + 36, py + 19], fill=WHITE, outline=INK)
+        draw.line([(px + 5, py + 6), (px + 27, py + 6)], fill=RED, width=2)
+        draw.line([(px + 5, py + 12), (px + 22, py + 12)], fill=INK_SOFT,
                   width=2)
     # the big centre placard carries the story's number
-    px, py, pw, ph = (x0 + x1) // 2 - 38, y0 + 9, 76, 21
+    px, py, pw, ph = x0 + 58, y0 + 9, 76, 21
     draw.line([(px + pw // 2, py + ph), (px + pw // 2, y1 - 12)],
               fill=(190, 160, 120), width=2)
     draw.rectangle([px, py, px + pw, py + ph], fill=WHITE, outline=INK)
@@ -568,10 +549,10 @@ def feat_pill(draw, box) -> None:
     draw.rectangle(box, outline=RULE)
 
 
-FEAT_ART = {"climate": feat_climate, "chart": feat_chart, "orbit": feat_orbit,
-            "flags": feat_flags, "bars": feat_bars, "percent": feat_percent,
-            "cricket": feat_cricket, "ballot": feat_ballot, "boat": feat_boat,
-            "placard": feat_placard, "pill": feat_pill}
+FEAT_ART = {"chart": feat_chart, "orbit": feat_orbit, "flags": feat_flags,
+            "bars": feat_bars, "percent": feat_percent, "cricket": feat_cricket,
+            "ballot": feat_ballot, "boat": feat_boat, "placard": feat_placard,
+            "pill": feat_pill}
 
 # --------------------------------------------------------------------------
 # Solid-fill world map (dark), geographically honest
@@ -784,73 +765,61 @@ def section_top(draw, data: dict) -> int:
 
 
 def section_leads(draw, data: dict, y: int) -> int:
-    """Two leads: the cyclone as a single wide hero, Kyiv beside it."""
+    """The three lead stories, each with its full illustration band."""
     gap = 10
-    hero_w = (INNER - gap) / 2          # ~50% of the lead row
-    widths = [hero_w, INNER - gap - hero_w]
-    art_hs = [HERO_ART_H, KYIV_ART_H]
+    col_w = (INNER - 2 * gap) / 3
     head_f = font(SANS_BOLD, 28)
     kick_f = font(SANS_BOLD, 11)
     body_f = font(SANS, 13)
     bottom = y
-    x = MARGIN
     for i, lead in enumerate(data["leads"]):
-        col_w = widths[i]
-        art_box = (int(x), y, int(x + col_w), y + art_hs[i])
+        x = MARGIN + i * (col_w + gap)
+        if i:
+            draw.line([(x - gap / 2, y), (x - gap / 2, y + 236)], fill=RULE, width=1)
+        art_box = (int(x), y, int(x + col_w), y + LEAD_ART_H)
         LEAD_ART[lead["art"]](draw, art_box)
-        cy = y + art_hs[i] + 5
+        cy = y + LEAD_ART_H + 6
         draw.text((x, cy), f'{lead["n"]}  {lead["kicker"]}', font=kick_f, fill=RED)
         cy += 15
         lines = wrap(draw, lead["headline"], head_f, col_w)
         cy = draw_lines(draw, lines, x, cy, head_f, INK, 27)
+        cy += 1
         caption = f'{lead["caption"]} ({lead["source"]})'
         lines = wrap(draw, caption, body_f, col_w)
         cy = draw_lines(draw, lines, x, cy, body_f, INK_SOFT, 13)
         bottom = max(bottom, cy)
-        x += col_w + gap
-    # divider between the two lead columns, as tall as the section
-    draw.line([(MARGIN + hero_w + gap / 2, y),
-               (MARGIN + hero_w + gap / 2, bottom)], fill=RULE, width=1)
     y = bottom + 2
     draw.line([(MARGIN, y), (X1, y)], fill=RULE, width=1)
     return y + 3
 
 
 def section_features(draw, data: dict, y: int) -> int:
-    """Eleven feature modules in rows of six and five, each illustrated."""
+    """Ten feature modules in two rows of five, each with its own graphic."""
     gap = 8
-    per_row = 6
-    col_w = (INNER - (per_row - 1) * gap) / per_row
-    head_f = font(SANS_BOLD, 17)
+    col_w = (INNER - 4 * gap) / 5
+    head_f = font(SANS_BOLD, 18)
     body_f = font(SANS, 13)
-    feats = data["features"]
-    for start in range(0, len(feats), per_row):
-        row_feats = feats[start:start + per_row]
+    for row in range(2):
         row_bottom = y
-        for col, feat in enumerate(row_feats):
+        for col in range(5):
+            feat = data["features"][row * 5 + col]
             x = MARGIN + col * (col_w + gap)
+            if col:
+                draw.line([(x - gap / 2, y), (x - gap / 2, y + 140)], fill=RULE, width=1)
             art_box = (int(x), y, int(x + col_w), y + FEAT_ART_H)
             FEAT_ART[feat["icon"]](draw, art_box)
             kick = f'{feat["n"]} · {feat["kicker"]}'
             kf = fit_font(draw, kick, SANS_BOLD, 10, col_w, minimum=8)
             draw.text((x, y + FEAT_ART_H + 3), kick, font=kf, fill=RED)
-            cy = y + FEAT_ART_H + 13
+            cy = y + FEAT_ART_H + 14
             lines = wrap(draw, feat["headline"], head_f, col_w)
-            cy = draw_lines(draw, lines, x, cy, head_f, INK, 17)
+            cy = draw_lines(draw, lines, x, cy, head_f, INK, 18)
             caption = f'{feat["caption"]} ({feat["source"]})'
             lines = wrap(draw, caption, body_f, col_w)
-            # the demoted COP31 card carries its full lead caption;
-            # at this narrower measure every caption fits in 4 lines
-            cap = 7 if feat["icon"] == "climate" else 4
-            cy = draw_lines(draw, lines[:cap], x, cy, body_f, INK_SOFT, 13)
+            cy = draw_lines(draw, lines[:3], x, cy, body_f, INK_SOFT, 13)
             row_bottom = max(row_bottom, cy)
-        # hairline dividers between this row's columns, at its real height
-        for col in range(1, len(row_feats)):
-            x = MARGIN + col * (col_w + gap)
-            draw.line([(x - gap / 2, y), (x - gap / 2, row_bottom)],
-                      fill=RULE, width=1)
-        y = row_bottom + 2
-        if start == 0:
+        y = row_bottom + 4
+        if row == 0:
             draw.line([(MARGIN, y - 3), (X1, y - 3)], fill=RULE, width=1)
     draw.line([(MARGIN, y - 2), (X1, y - 2)], fill=INK, width=1)
     return y + 2
@@ -858,34 +827,34 @@ def section_features(draw, data: dict, y: int) -> int:
 
 def section_bottom(draw, data: dict, y: int) -> int:
     """World map (left) and the 25 one-line briefs (right, two columns)."""
-    map_w = 324
+    map_w = 348
     head_f = font(SANS_BOLD, 14)
     draw.text((MARGIN, y), "WHERE IT HAPPENED", font=head_f, fill=INK)
     draw.text((MARGIN, y + 15), "Pins 1-13: the leads and features above",
               font=font(SANS_ITALIC, 11), fill=INK_SOFT)
-    draw_map(draw, (MARGIN, y + 30, MARGIN + map_w, y + 166), data["pins"])
-    # Briefs, to the right of the map — one uniform size for every line,
-    # never shrunk per line.
-    bx = MARGIN + map_w + 14
+    draw_map(draw, (MARGIN, y + 30, MARGIN + map_w, y + 198), data["pins"])
+    # Briefs, to the right of the map.
+    bx = MARGIN + map_w + 16
     bw = X1 - bx
     draw.text((bx, y), "ALSO ON FRIDAY 20 NOVEMBER", font=head_f, fill=INK)
     draw.text((bx, y + 15), "25 more stories, in brief",
               font=font(SANS_ITALIC, 11), fill=INK_SOFT)
     col_w = (bw - 12) / 2
-    num_f = font(SANS_BOLD, 11)
-    place_f = font(SANS_BOLD, 11)
-    brief_f = font(SANS, 11)
+    num_f = font(SANS_BOLD, 12)
+    place_f = font(SANS_BOLD, 12)
     per_col = math.ceil(len(data["briefs"]) / 2)
     for idx, brief in enumerate(data["briefs"]):
         col, row = divmod(idx, per_col)
         x = bx + col * (col_w + 12)
-        yy = y + 32 + row * 12
+        yy = y + 33 + row * 13.9
         draw.text((x, yy), f'{brief["n"]}', font=num_f, fill=RED)
-        nx = x + text_w(draw, f'{brief["n"]}', num_f) + 3
+        nx = x + text_w(draw, f'{brief["n"]}', num_f) + 4
         draw.text((nx, yy), brief["place"], font=place_f, fill=INK)
-        px = nx + text_w(draw, brief["place"], place_f) + 3
-        draw.text((px, yy), brief["text"], font=brief_f, fill=INK_SOFT)
-    return y + 190
+        px = nx + text_w(draw, brief["place"], place_f) + 4
+        # One line only: shrink just this line if it would spill over.
+        bf = fit_font(draw, brief["text"], SANS, 12, x + col_w - px, minimum=9)
+        draw.text((px, yy), brief["text"], font=bf, fill=INK_SOFT)
+    return y + 213
 
 
 def section_close(draw, data: dict, y: int) -> int:
